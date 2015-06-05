@@ -2,7 +2,7 @@
 
 class Route {
 
-private static $Routes = array(
+private static $Routes = [
 	'GET'     => [],
 	'PUT'     => [],
 	'POST'    => [],
@@ -11,7 +11,7 @@ private static $Routes = array(
 	'TRACE'   => [],
 	'CONNECT' => [],
 	'PATCH'   => [],
-);
+];
 
 //------------------------------------------------------------------------------
 // Name: Route
@@ -28,42 +28,42 @@ static private function __create_route($method, $path, $handler) {
 // Name: Get
 //------------------------------------------------------------------------------
 static function Get($path, $handler) {
-	self::__create_route('GET', $path, $handler);
+	return self::__create_route('GET', $path, $handler);
 }
 
 //------------------------------------------------------------------------------
 // Name: Put
 //------------------------------------------------------------------------------
 static function Put($path, $handler) {
-	self::__create_route('PUT', $path, $handler);
+	return self::__create_route('PUT', $path, $handler);
 }
 
 //------------------------------------------------------------------------------
 // Name: Post
 //------------------------------------------------------------------------------
 static function Post($path, $handler) {
-	self::__create_route('POST', $path, $handler);
+	return self::__create_route('POST', $path, $handler);
 }
 
 //------------------------------------------------------------------------------
 // Name: Delete
 //------------------------------------------------------------------------------
 static function Delete($path, $handler) {
-	self::__create_route('DELETE', $path, $handler);
+	return self::__create_route('DELETE', $path, $handler);
 }
 
 //------------------------------------------------------------------------------
 // Name: Options
 //------------------------------------------------------------------------------
 static function Options($path, $handler) {
-	self::__create_route('OPTIONS', $path, $handler);
+	return self::__create_route('OPTIONS', $path, $handler);
 }
 
 //------------------------------------------------------------------------------
 // Name: Options
 //------------------------------------------------------------------------------
 static function Patch($path, $handler) {
-	self::__create_route('PATCH', $path, $handler);
+	return self::__create_route('PATCH', $path, $handler);
 }
 
 //------------------------------------------------------------------------------
@@ -76,10 +76,6 @@ private static function __find_route_handler($request_method, $request_url, &$ma
 	foreach($routes as $route => $handler) {
 		$route_path    = $handler[0];
 		$route_handler = $handler[1];
-
-		// substitute things to make the regex a bit more useful
-		// while having the original route string be clean
-
 
 		// redundant slashes	
 		$route_path = str_replace('/', '[\\/]+', $route_path);			
@@ -142,9 +138,8 @@ static function Execute() {
 			// vs. nothing?
 		}
 
-		// TODO(eteran): do some real outputting here
-		echo $response->content;		
-		exit;	
+		$response->execute();		
+		exit;
 	}
 	
 	// OK, not found...

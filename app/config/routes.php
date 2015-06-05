@@ -6,7 +6,7 @@
 //------------------------------------------------------------------------------
 Route::Get('/', [
 	function($req, $res) {
-		// a before filter
+		// a before filter, if you return anything, that's terminates the chain
 	},
 	function($req, $res) {
 		return View::make('index');
@@ -17,6 +17,6 @@ Route::Get('/', [
 // Route: /hello
 // Method: Post
 //------------------------------------------------------------------------------
-Route::Get('/hello/:id', function($req, $res) {
-	return View::make('hello', ['name' => $req['id']]);
+Route::Get('/hello/:name', function($req, $res) {
+	return View::make('hello', ['name' => $req['name']]);
 });
