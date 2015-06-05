@@ -98,7 +98,7 @@ private static function __find_route_handler($request_method, $request_url, &$ma
 			return '(?P<' . $m[1] . '>' . $pattern . ')';
 		}, 	$route_path);
 
-		$route_regex = sprintf('/^%s$/', $route_as_regex);
+		$route_regex = sprintf('#^%s$#', $route_as_regex);
 		
 		if(preg_match($route_regex, $request_url, $matches)) {
 			return $route_handler;
