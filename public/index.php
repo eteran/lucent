@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'/../framework/Framework.php');
+require_once(__DIR__.'/../vendor/Framework.php');
 
 use \Lucent\Route;
 
