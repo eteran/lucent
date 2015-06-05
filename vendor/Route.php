@@ -3,14 +3,14 @@
 class Route {
 
 private static $Routes = array(
-	'GET'     => array(),
-	'PUT'     => array(),
-	'POST'    => array(),
-	'DELETE'  => array(),
-	'OPTIONS' => array(),
-	'TRACE'   => array(),
-	'CONNECT' => array(),
-	'PATCH'   => array(),
+	'GET'     => [],
+	'PUT'     => [],
+	'POST'    => [],
+	'DELETE'  => [],
+	'OPTIONS' => [],
+	'TRACE'   => [],
+	'CONNECT' => [],
+	'PATCH'   => [],
 );
 
 //------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ static function Patch($path, $handler) {
 //------------------------------------------------------------------------------
 // Name: __find_route_handler
 //------------------------------------------------------------------------------
-private static function __find_route_handler($request_method, $request_url) {
+private static function __find_route_handler($request_method, $request_url, &$matches) {
 
 	$routes = self::$Routes[$request_method];
 	
@@ -80,8 +80,13 @@ private static function __find_route_handler($request_method, $request_url) {
 		// substitute things to make the regex a bit more useful
 		// while having the original route string be clean
 
+
 		// redundant slashes	
 		$route_path = str_replace('/', '[\\/]+', $route_path);			
+		
+		$route_as_regex = preg_replace_callback('#:([\w]+)#', function($m) {		
+			return '(?P<' . $m[1] . '>[\w]+)';
+		}, 	$route_path);
 
 		// some classes are handled
 		/*
@@ -94,9 +99,8 @@ private static function __find_route_handler($request_method, $request_url) {
 		$route_path = str_replace(':hex',     '[a-fA-F0-9]+',      $route_path); // any string consisting of hexdecimal chars
 		*/
 		
-		$route_regex = sprintf('/^%s$/', $route_path);
-
-		$matches = array();
+		$route_regex = sprintf('/^%s$/', $route_as_regex);
+		
 		if(preg_match($route_regex, $request_url, $matches)) {
 			return $route_handler;
 		}
@@ -116,12 +120,14 @@ static function Execute() {
 	// HEAD is the same as GET, but PHP will stop sending data after the headers
 	$request_method      = ($real_request_method == 'HEAD') ? 'GET' : $real_request_method;
 
-	$handlers = self::__find_route_handler($request_method, $request_url);
+	$matches = [];
+	$handlers = self::__find_route_handler($request_method, $request_url, $matches);
 	if($handlers != null) {
 	
-		$request         = new Request();
-		$request->url    = $request_url;
-		$request->method = $real_request_method;
+		$request          = new Request();
+		$request->url     = $request_url;
+		$request->method  = $real_request_method;
+		$request->matches = $matches;
 
 		$response = new Response();	
 	
@@ -143,9 +149,9 @@ static function Execute() {
 	
 	// OK, not found...
 	// are there ANY methods that could have matched?
-	$accepted_methods = array();
+	$accepted_methods = [];
 	foreach(self::$Routes as $method => $value) {
-		$handlers = self::__find_route_handler($method, $request_url);
+		$handlers = self::__find_route_handler($method, $request_url, $matches);
 		if($handlers != null) {
 			$accepted_methods[] = $method;
 		}

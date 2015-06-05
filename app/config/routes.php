@@ -17,6 +17,6 @@ Route::Get('/', [
 // Route: /hello
 // Method: Post
 //------------------------------------------------------------------------------
-Route::Get('/hello', function($req, $res) {
-	return View::make('hello', ['name' => 'User!']);
+Route::Get('/hello/:id', function($req, $res) {
+	return View::make('hello', ['name' => $req['id']]);
 });
