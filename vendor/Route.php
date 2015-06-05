@@ -13,6 +13,13 @@ private static $Routes = [
 	'PATCH'   => [],
 ];
 
+private static $Patterns = [
+	'number' => '[0-9]+',
+	'alpha'  => '[a-zA-Z]+',
+	'alnum'  => '[a-zA-Z0-9]+',
+	'hex'    => '[a-fA-F0-9]+',
+];
+
 //------------------------------------------------------------------------------
 // Name: Route
 //------------------------------------------------------------------------------
@@ -20,7 +27,7 @@ static private function __create_route($method, $path, $handler) {
 	if(is_array($handler)) {
 		self::$Routes[$method][] = array($path, $handler);
 	} else {
-		self::$Routes[$method][] = array($path, array($handler));
+		self::$Routes[$method][] = array($path, [$handler]);
 	}
 }
 
@@ -80,21 +87,17 @@ private static function __find_route_handler($request_method, $request_url, &$ma
 		// redundant slashes	
 		$route_path = str_replace('/', '[\\/]+', $route_path);			
 		
-		$route_as_regex = preg_replace_callback('#:([\w]+)#', function($m) {		
-			return '(?P<' . $m[1] . '>[\w]+)';
+		$route_as_regex = preg_replace_callback('#:([\w\.]+)#', function($m) {
+		
+			if(array_key_exists($m[1], self::$Patterns)) {
+				$pattern = self::$Patterns[$m[1]];
+			} else {
+				$pattern = '[\w\.]+';
+			}
+						
+			return '(?P<' . $m[1] . '>' . $pattern . ')';
 		}, 	$route_path);
 
-		// some classes are handled
-		/*
-		$route_path = str_replace(':pnumber', '(?:0|[1-9][0-9]*)', $route_path); // positive integer
-		$route_path = str_replace(':number',  '[0-9]+',            $route_path); // integer
-		$route_path = str_replace(':segment', '[^\/]+',            $route_path); // any segment (text between '/'s)
-		$route_path = str_replace(':any',     '.+'    ,            $route_path); // the rest of the URL if any
-		$route_path = str_replace(':alpha',   '[a-zA-Z]+',         $route_path); // any string consisting of alphabetic chars
-		$route_path = str_replace(':alnum',   '[a-zA-Z0-9]+',      $route_path); // any string consisting of alphabetic or numeric chars
-		$route_path = str_replace(':hex',     '[a-fA-F0-9]+',      $route_path); // any string consisting of hexdecimal chars
-		*/
-		
 		$route_regex = sprintf('/^%s$/', $route_as_regex);
 		
 		if(preg_match($route_regex, $request_url, $matches)) {
