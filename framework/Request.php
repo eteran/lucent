@@ -1,4 +1,4 @@
-<?php
+<?php namespace Lucent;
 
 class Request {
 	public $method;

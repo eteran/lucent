@@ -1,4 +1,4 @@
-<?php
+<?php namespace Lucent;
 
 class Response {
 	public $type    = 'text/html';

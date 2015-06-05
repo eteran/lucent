@@ -1,10 +1,10 @@
-<?php
+<?php namespace Lucent;
 
 //------------------------------------------------------------------------------
 // Route: /
 // Method: GET
 //------------------------------------------------------------------------------
-Framework::Get('/', [
+Route::Get('/', [
 	function($req, $res) {
 		// a before filter
 	},
@@ -17,6 +17,6 @@ Framework::Get('/', [
 // Route: /hello
 // Method: Post
 //------------------------------------------------------------------------------
-Framework::Get('/hello', function($req, $res) {
+Route::Get('/hello', function($req, $res) {
 	return View::make('hello', ['name' => 'User!']);
 });
