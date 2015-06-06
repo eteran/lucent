@@ -55,7 +55,7 @@
 		</header>
 		<main>
 			<h2>The following error occurred:</h2>
-			<p>You don't have permission to access <?php echo $request_url ?> on this server.</p>
+			<p>You don't have permission to access <?php echo $request->url ?> on this server.</p>
 		</main>
 		<footer>
 			<?php echo $_SERVER['SERVER_SIGNATURE'] ?>

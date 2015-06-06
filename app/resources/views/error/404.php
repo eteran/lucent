@@ -55,7 +55,7 @@
 		</header>
 		<main>
 			<h2>The following error occurred:</h2>
-			<p>The requested URL <?php echo $URL ?> was not found on this server.</p>
+			<p>The requested URL <?php echo $request->url ?> was not found on this server.</p>
 		</main>
 		<footer>
 			<?php echo $_SERVER['SERVER_SIGNATURE'] ?>

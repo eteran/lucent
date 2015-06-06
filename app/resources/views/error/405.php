@@ -55,7 +55,7 @@
 		</header>
 		<main>
 			<h2>The following error occurred:</h2>
-			<p>The method <?php echo $METHOD ?> specified in the Request-Line is not allowed for the specified resource.</p>
+			<p>The method <?php echo $request->method ?> specified in the Request-Line is not allowed for the specified resource.</p>
 		</main>
 		<footer>
 			<?php echo $_SERVER['SERVER_SIGNATURE'] ?>
