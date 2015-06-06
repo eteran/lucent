@@ -95,7 +95,7 @@ private static function __find_route_handler($request_method, $request_url, &$ma
 				$pattern = '[\w\.]+';
 			}
 
-			return '(?P<' . $m[1] . '>' . $pattern . ')';
+			return "(?P<$m[1]>$pattern)";
 		}, 	$route_path);
 
 		$route_regex = sprintf('#^%s$#', $route_as_regex);
@@ -113,9 +113,11 @@ private static function __find_route_handler($request_method, $request_url, &$ma
 //------------------------------------------------------------------------------
 static function Execute() {
 
-	// NOTE(eteran): PHP's parse_url seems to be broken when dealing with
-	//               more than two redundant leading forward slashes in the
-	//               URL
+	// NOTE(eteran): PHP >= 5.4.7 parse_url assumes that two or more 
+	//               redundant leading forward slashes in the URL are simply
+	//               a path with a missing scheme... But, it doesn't seem to
+	//               handle things like "///test" correctly. Just returning
+	//               (bool)false (instead of the expected "/test"
 	$request_url         = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 	$real_request_method = strtoupper($_SERVER['REQUEST_METHOD']);
