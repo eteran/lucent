@@ -5,13 +5,13 @@ class Response {
 	public $type    = 'text/html';
 	public $status;
 	public $content;
-	
+
 	public function __construct($content = '', $status = 200) {
 		$this->content = $content;
 		$this->status  = $status;
 	}
-	
-	public function execute() {	
+
+	public function execute() {
 		static $http = [
 			100 => "HTTP/1.1 100 Continue",
 			101 => "HTTP/1.1 101 Switching Protocols",
@@ -53,11 +53,11 @@ class Response {
 			503 => "HTTP/1.1 503 Service Unavailable",
 			504 => "HTTP/1.1 504 Gateway Time-out"
 		];
-	   
+
 		if(isset($http[$this->status])) {
 			header($http[$this->status]);
-		}	
-	
+		}
+
 		echo $this->content;
 	}
 }
