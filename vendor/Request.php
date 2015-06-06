@@ -39,5 +39,26 @@ class Request implements \ArrayAccess {
 
     public function __unset($key) {
         unset($this->matches[$key]);
-    }	
+    }
+	
+	public function isJson() {
+		$headers = apache_request_headers();
+		
+		if(isset($headers['Content-Type'])) {
+			return strpos($headers['Content-Type'], 'application/json') !== false;
+		}
+		
+		return false;
+	}
+	
+	public function isAjax() {
+		$headers = apache_request_headers();
+		
+		if(isset($headers['X-Requested-With'])) {
+			return strpos($headers['X-Requested-With'], 'XMLHttpRequest') !== false;
+		}
+		
+		return false;
+		
+	}
 }

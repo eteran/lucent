@@ -7,5 +7,3 @@ date_default_timezone_set('America/New_York');
 
 // probably a good idea
 setlocale(LC_ALL, 'en_US.utf8');
-
-
