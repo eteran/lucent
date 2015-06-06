@@ -7,3 +7,6 @@ date_default_timezone_set('America/New_York');
 
 // probably a good idea
 setlocale(LC_ALL, 'en_US.utf8');
+
+// set the session name to something nice
+session_name('LUCENT_SESSION');
