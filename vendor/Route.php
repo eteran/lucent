@@ -164,7 +164,11 @@ static function Execute() {
 
 	// other methods found? then 405
 	if(!empty($accepted_methods)) {
-		$response = response(View::make('error.405', ['request' => $request]), 405);
+		$response = response(
+			View::make('error.405', ['request' => $request]), 
+			405, 
+			['Allow: ' . implode(', ', $accepted_methods)]
+		);
 
 		// TODO(eteran): add 'Allow' header listing accepted methods
 

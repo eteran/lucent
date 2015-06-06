@@ -5,10 +5,12 @@ class Response {
 	public $type    = 'text/html';
 	public $status;
 	public $content;
+	public $headers;
 
-	public function __construct($content = '', $status = 200) {
+	public function __construct($content = '', $status = 200, $headers = []) {
 		$this->content = $content;
 		$this->status  = $status;
+		$this->headers = $headers;
 	}
 
 	public function execute() {
@@ -58,10 +60,14 @@ class Response {
 			header($http[$this->status]);
 		}
 
+		foreach($this->headers as $header) {
+			header($header);
+		}
+
 		echo $this->content;
 	}
 }
 
-function response($content, $status = 200) {
-	return new Response($content, $status);
+function response($content, $status = 200, $headers = []) {
+	return new Response($content, $status, $headers);
 }
