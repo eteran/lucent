@@ -1,12 +1,14 @@
 <IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews
-    </IfModule>
+	<IfModule mod_negotiation.c>
+		Options -MultiViews
+	</IfModule>
 
 	RewriteEngine on
 	RewriteBase /
 
+	# make sure these are past along, even when in the presense of Fast-CGI
 	RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+	RewriteRule .* - [E=HTTP_CONTENT_TYPE:%{HTTP:Content-Type}]
 
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
