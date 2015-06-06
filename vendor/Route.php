@@ -158,7 +158,7 @@ static function Execute() {
 	// other methods found? then 405
 	if(!empty($accepted_methods)) {
 		$response->status  = 405;
-		$response->content = View::make('error.405', ['method' => $request_method]);
+		$response->content = View::make('error.405', ['METHOD' => $request_method]);
 		
 		// TODO(eteran): add 'Allow' header listing accepted methods
 		
@@ -167,7 +167,7 @@ static function Execute() {
 	
 	// ok, nothing was found, 404
 	$response->status  = 404;
-	$response->content = View::make('error.404', ['request_url' => $request_url]);
+	$response->content = View::make('error.404', ['URL' => $request_url]);
 	exit($response->execute());
 }
 
