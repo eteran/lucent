@@ -5,6 +5,7 @@ require_once('Response.php');
 require_once('View.php');
 require_once('Route.php');
 require_once('Input.php');
+require_once('Redirect.php');
 
 // TODO(eteran): implement some clever autoloading
 
