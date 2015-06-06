@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>ERROR 404 - Not Found</title>
+	<title>ERROR 500 - Internal Server Error</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex" />
 	<style type="text/css">
@@ -50,12 +50,14 @@
 </head>
 <body>
 	<div id="page">
-		<div id="header" class="status4xx">
-			<h1>ERROR 404 - Not Found</h1>
+		<div id="header" class="status5xx">
+			<h1>ERROR 500 - Internal Server Error</h1>
 		</div>
 		<div id="content">
 			<h2>The following error occurred:</h2>
-			<p>The requested URL <?php echo $request_url ?> was not found on this server.</p>
+			<p>The server encountered an internal error or misconfiguration and was unable to complete your request.</p>
+			<p>Please contact the server administrator, <?php $_SERVER['SERVER_ADMIN'] ?> and inform them of the time the error occurred, and anything you might have done that may have caused the error.</p>
+			<p>More information about this error may be available in the server error log.</p>
 		</div>
 		<div id="footer">
 			<?php echo $_SERVER['SERVER_SIGNATURE'] ?>

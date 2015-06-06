@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>ERROR 404 - Not Found</title>
+	<title>ERROR 401 - Authorization Required</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex" />
 	<style type="text/css">
@@ -51,11 +51,11 @@
 <body>
 	<div id="page">
 		<div id="header" class="status4xx">
-			<h1>ERROR 404 - Not Found</h1>
+			<h1>ERROR 401 - Authorization Required</h1>
 		</div>
 		<div id="content">
 			<h2>The following error occurred:</h2>
-			<p>The requested URL <?php echo $request_url ?> was not found on this server.</p>
+			<p>This server could not verify that you are authorized to access the document requested. Either you supplied the wrong credentials (e.g., bad password), or your browser doesn't understand how to supply the credentials required.</p>
 		</div>
 		<div id="footer">
 			<?php echo $_SERVER['SERVER_SIGNATURE'] ?>

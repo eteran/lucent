@@ -15,8 +15,8 @@ Route::Get('/', [
 
 //------------------------------------------------------------------------------
 // Route: /hello
-// Method: GET
+// Method: POST
 //------------------------------------------------------------------------------
-Route::Get('/hello/:name', function($req, $res) {
+Route::Post('/hello/:name', function($req, $res) {
 	return View::make('hello', ['name' => $req['name']]);
 });

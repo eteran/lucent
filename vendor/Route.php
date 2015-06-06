@@ -67,7 +67,7 @@ static function Options($path, $handler) {
 }
 
 //------------------------------------------------------------------------------
-// Name: Options
+// Name: Patch
 //------------------------------------------------------------------------------
 static function Patch($path, $handler) {
 	return self::__create_route('PATCH', $path, $handler);
@@ -121,15 +121,15 @@ static function Execute() {
 
 	$matches = [];
 	$handlers = self::__find_route_handler($request_method, $request_url, $matches);
-	if($handlers != null) {
 	
-		$request          = new Request();
-		$request->url     = $request_url;
-		$request->method  = $real_request_method;
-		$request->matches = $matches;
+	$request          = new Request();
+	$request->url     = $request_url;
+	$request->method  = $real_request_method;
+	$request->matches = $matches;
 
-		$response = new Response();	
+	$response = new Response();		
 	
+	if($handlers != null) {
 		foreach($handlers as $handler) {
 			assert(is_callable($handler));
 			$return = call_user_func($handler, $request, $response);
@@ -141,10 +141,10 @@ static function Execute() {
 			// vs. nothing?
 		}
 
-		$response->execute();		
-		exit;
+		exit($response->execute());
 	}
 	
+
 	// OK, not found...
 	// are there ANY methods that could have matched?
 	$accepted_methods = [];
@@ -155,16 +155,20 @@ static function Execute() {
 		}
 	}
 	
-	// TODO(eteran): set headers, read 405 template, etc...
+	// other methods found? then 405
 	if(!empty($accepted_methods)) {
-		echo '405: Invalid Method';
-		echo '<br>';
-		echo 'Acceptable Methods: ' . implode(',', $accepted_methods);
-		exit;
+		$response->status  = 405;
+		$response->content = View::make('error.405', ['method' => $request_method]);
+		
+		// TODO(eteran): add 'Allow' header listing accepted methods
+		
+		exit($response->execute());
 	}
 	
-	// TODO(eteran): set headers, read 404 template, etc...
-	echo View::make('error.404');
+	// ok, nothing was found, 404
+	$response->status  = 404;
+	$response->content = View::make('error.404', ['request_url' => $request_url]);
+	exit($response->execute());
 }
 
 }
