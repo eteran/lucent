@@ -99,7 +99,7 @@ private static function __find_route_handler($request_method, $request_url, &$ma
 		}, 	$route_path);
 
 		$route_regex = sprintf('#^%s$#', $route_as_regex);
-		
+			
 		if(preg_match($route_regex, $request_url, $matches)) {
 			return $route_handler;
 		}
@@ -113,7 +113,11 @@ private static function __find_route_handler($request_method, $request_url, &$ma
 //------------------------------------------------------------------------------
 static function Execute() {
 
-	$request_url         = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+	// NOTE(eteran): PHP's parse_url seems to be broken when dealing with 
+	//               more than two redundant leading forward slashes in the 
+	//               URL	
+	$request_url         = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);	
+	
 	$real_request_method = strtoupper($_SERVER['REQUEST_METHOD']);
 
 	// HEAD is the same as GET, but PHP will stop sending data after the headers
@@ -127,24 +131,25 @@ static function Execute() {
 	$request->method  = $real_request_method;
 	$request->matches = $matches;
 
-	$response = new Response();
-	
 	if($handlers != null) {
+	
+		$response = null;
+	
 		foreach($handlers as $handler) {
 			assert(is_callable($handler));
 			$return = call_user_func($handler, $request);
 			if(is_string($return)) {
-				$response->content = $return;
+				$response = response($return);
+				break;
+			} else if($return != null) {
+				$response = $return;
 				break;
 			}
-			// TODO(eteran): can we detect if they returned an error code
-			// vs. nothing?
 		}
 
 		exit($response->execute());
 	}
 	
-
 	// OK, not found...
 	// are there ANY methods that could have matched?
 	$accepted_methods = [];
@@ -157,8 +162,7 @@ static function Execute() {
 	
 	// other methods found? then 405
 	if(!empty($accepted_methods)) {
-		$response->status  = 405;
-		$response->content = View::make('error.405', ['request' => $request]);
+		$response = response(View::make('error.405', ['request' => $request]), 405);
 		
 		// TODO(eteran): add 'Allow' header listing accepted methods
 		
@@ -166,8 +170,7 @@ static function Execute() {
 	}
 	
 	// ok, nothing was found, 404
-	$response->status  = 404;
-	$response->content = View::make('error.404', ['request' => $request]);
+	$response = response(View::make('error.404', ['request' => $request]), 404);
 	exit($response->execute());
 }
 

@@ -3,8 +3,13 @@
 class Response {
 
 	public $type    = 'text/html';
-	public $status  = 200;
-	public $content = '';
+	public $status;
+	public $content;
+	
+	public function __construct($content = '', $status = 200) {
+		$this->content = $content;
+		$this->status  = $status;
+	}
 	
 	public function execute() {	
 		static $http = [
@@ -55,4 +60,8 @@ class Response {
 	
 		echo $this->content;
 	}
+}
+
+function response($content, $status = 200) {
+	return new Response($content, $status);
 }
