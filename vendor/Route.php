@@ -127,12 +127,12 @@ static function Execute() {
 	$request->method  = $real_request_method;
 	$request->matches = $matches;
 
-	$response = new Response();		
+	$response = new Response();
 	
 	if($handlers != null) {
 		foreach($handlers as $handler) {
 			assert(is_callable($handler));
-			$return = call_user_func($handler, $request, $response);
+			$return = call_user_func($handler, $request);
 			if(is_string($return)) {
 				$response->content = $return;
 				break;

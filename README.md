@@ -34,11 +34,11 @@ Usage is **simple**. To create routes, open `app/config/routes.php` and write
 easy to understand code like the following:
 
 
-	Route::Get('/', function($req, $res) {
+	Route::Get('/', function($req) {
 		return View::make('index');
 	});
 
-	Route::Get('/hello/:name', function($req, $res) {
+	Route::Get('/hello/:name', function($req) {
 		return View::make('hello', ['name' => $req['name']]);
 	});
 

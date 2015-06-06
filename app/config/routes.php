@@ -2,21 +2,21 @@
 
 //------------------------------------------------------------------------------
 // Route: /
-// Method: GET
+// Method: Get
 //------------------------------------------------------------------------------
 Route::Get('/', [
-	function($req, $res) {
+	function($req) {
 		// a before filter, if you return anything, that's terminates the chain
 	},
-	function($req, $res) {
+	function($req) {
 		return View::make('index');
 	}
 ]);
 
 //------------------------------------------------------------------------------
 // Route: /hello
-// Method: POST
+// Method: Get
 //------------------------------------------------------------------------------
-Route::Post('/hello/:name', function($req, $res) {
+Route::Get('/hello/:name', function($req) {
 	return View::make('hello', ['name' => $req['name']]);
 });
