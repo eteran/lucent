@@ -149,7 +149,10 @@ static function Execute() {
 			}
 		}
 
-		exit($response->execute());
+		if($response) {
+			$response->execute();
+		}
+		exit;
 	}
 
 	// OK, not found...

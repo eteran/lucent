@@ -41,14 +41,20 @@ class Request implements \ArrayAccess {
         unset($this->matches[$key]);
     }
 	
-	public function isJson() {
+	public function mediaType() {
 		$headers = apache_request_headers();
 		
 		if(isset($headers['Content-Type'])) {
-			return strpos($headers['Content-Type'], 'application/json') !== false;
+			$contentType = $headers['Content-Type'];
+			$splitContentType = preg_split('/\\s*[;,]\\s*/', $contentType);
+			return strtolower($splitContentType[0]);
 		}
 		
 		return false;
+	}
+	
+	public function isJson() {
+		return mediaType() === "application/json";
 	}
 	
 	public function isAjax() {
