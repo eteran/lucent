@@ -9,7 +9,7 @@ class Redirect {
 		$this->code = $code;
 	}
 	
-	public function execute($request) {
+	public function execute() {
 		
 		switch($this->code) {
 		case 302:
