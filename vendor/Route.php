@@ -149,8 +149,8 @@ static function Execute() {
 			}
 		}
 
-		if($response) {
-			$response->execute();
+		if(is_object($response)) {
+			@$response->execute();
 		}
 		exit;
 	}
