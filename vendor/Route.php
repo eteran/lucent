@@ -20,15 +20,30 @@ private static $Patterns = [
 	'hex'    => '[a-fA-F0-9]+',
 ];
 
+private static $FilterStack = [];
+
 //------------------------------------------------------------------------------
-// Name: Route
+// Name: __create_route
 //------------------------------------------------------------------------------
 static private function __create_route($method, $path, $handler) {
-	if(is_array($handler)) {
-		self::$Routes[$method][] = array($path, $handler);
-	} else {
-		self::$Routes[$method][] = array($path, [$handler]);
+
+	if(!is_array($handler)) {
+		$handler = [$handler];
 	}
+	
+	$handler = array_merge(self::$FilterStack, $handler);
+	
+	self::$Routes[$method][] = array($path, $handler);
+}
+
+//------------------------------------------------------------------------------
+// Name: Filter
+//------------------------------------------------------------------------------
+static function Filter($filter, $handlers) {
+
+	array_push(self::$FilterStack, $filter);
+	$handlers();
+	array_pop(self::$FilterStack);
 }
 
 //------------------------------------------------------------------------------
@@ -84,9 +99,6 @@ private static function __find_route_handler($request_method, $request_url, &$ma
 		$route_path    = $handler[0];
 		$route_handler = $handler[1];
 
-		// redundant slashes
-		$route_path = str_replace('/', '[\\/]+', $route_path);
-
 		$route_as_regex = preg_replace_callback('#:([\w\.]+)#', function($m) {
 
 			if(array_key_exists($m[1], self::$Patterns)) {
@@ -134,7 +146,6 @@ static function Execute() {
 	$request->matches = $matches;
 
 	if($handlers != null) {
-
 		$response = null;
 
 		foreach($handlers as $handler) {
@@ -172,9 +183,6 @@ static function Execute() {
 			405, 
 			['Allow: ' . implode(', ', $accepted_methods)]
 		);
-
-		// TODO(eteran): add 'Allow' header listing accepted methods
-
 		exit($response->execute());
 	}
 
