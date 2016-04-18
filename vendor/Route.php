@@ -104,7 +104,7 @@ private static function __find_route_handler($request_method, $request_url, &$ma
 			if(array_key_exists($m[1], self::$Patterns)) {
 				$pattern = self::$Patterns[$m[1]];
 			} else {
-				$pattern = '[\w\.-]+';
+				$pattern = '[\w\.%-]+';
 			}
 
 			return "(?P<$m[1]>$pattern)";
