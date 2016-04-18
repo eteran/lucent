@@ -16,7 +16,7 @@ class LogImpl {
 		}
 	}
 
-	public function debugs($message) {
+	public function debug($message) {
 		$this->log(Log::DEBUG, $message);
 	}
 

@@ -9,7 +9,13 @@ class View {
 		extract($variables);
 		ob_start();
 		$template_file = sprintf('%s/%s.php', Lucent::view_path(), str_replace('.', DIRECTORY_SEPARATOR, $filename));		
-		@require($template_file);
+		
+		if (!file_exists($template_file)) {
+			return "Template Not Found";
+		} else {
+			@require($template_file);
+		}
+
 		return ob_get_clean();
 	}
 }
