@@ -96,7 +96,7 @@ class Log {
 	
 	static public function instance() {
 		if(is_null(self::$instance_)) {
-			self::$instance_ = new LogImpl(__DIR__.'/../app/storage/log/'.'lucent-'.date('Y-m-d').'.log');
+			self::$instance_ = new LogImpl(Lucent::log_path() . '/lucent-'.date('Y-m-d').'.log');
 		}
 		
 		return self::$instance_;
